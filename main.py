@@ -10,7 +10,6 @@ import Policy_Gradient_REINFORCE
 
 # Create and wrap the environment
 env = gym.make('InvertedPendulum-v4', render_mode='human')
-wrapped_env = gym.wrappers.RecordEpisodeStatistics(env, 50)  # Records episode-reward
 
 total_num_episodes = int(5e3)  # Total number of episodes
 # Observation-space of InvertedPendulum-v4 (4)
@@ -19,6 +18,7 @@ obs_space_dims = env.observation_space.shape[0]
 action_space_dims = env.action_space.shape[0]
 num_episodes = sys.maxsize
 max_timesteps = 100000
+rewards_moving_window = deque(maxlen=50) # 50 episode window moving average
 
 
 def preprocess_state(state):
@@ -28,8 +28,7 @@ def preprocess_state(state):
 
 agent = Policy_Gradient_REINFORCE.Policy_Gradient_REINFORCE(action_space_size=action_space_dims, state_space_size=obs_space_dims)
 for episode in range(num_episodes):
-    state = env.reset()[0]
-    time_alive = deque(maxlen=100)
+    state = env.reset(seed=0)[0]
     episode_rewards = []
     for t in range(max_timesteps):
         state = preprocess_state(state)
@@ -41,10 +40,8 @@ for episode in range(num_episodes):
 
         state = next_state
         if done or truncated:
-            time_alive = t
-            #print("Reward for episode {0} = {1}".format(episode, np.mean(episode_rewards)))
-            print("Episode {0} time alive = {1}".format(episode, t))
-
+            rewards_moving_window.append(np.sum(episode_rewards))
+            print("Episode:", episode, "Average Reward:", np.mean(rewards_moving_window))
             break
             pass
         pass

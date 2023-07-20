@@ -6,7 +6,7 @@ class Policy_Gradient_REINFORCE:
     def __init__(self, action_space_size, state_space_size):
         self.gamma = 0.99
         self.policy_network = PolicyNetwork(action_space_size=action_space_size, observation_space_size=state_space_size)
-        self.optimizer = torch.optim.Adam(self.policy_network.parameters(), lr=0.00002)
+        self.optimizer = torch.optim.AdamW(self.policy_network.parameters(), lr=0.00008)
         self.episode_rewards = []
         self.log_probs = []
         pass
