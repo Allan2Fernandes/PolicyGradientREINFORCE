@@ -6,7 +6,7 @@ import random
 from collections import deque
 import Policy_Gradient_REINFORCE
 
-# Create and wrap the environment
+# Create environment
 env = gym.make('InvertedPendulum-v4', render_mode='human')
 
 obs_space_dims = env.observation_space.shape[0]
