@@ -6,7 +6,7 @@ class Policy_Gradient_REINFORCE:
     def __init__(self, action_space_size, state_space_size):
         self.gamma = 0.99
         self.policy_network = PolicyNetwork(action_space_size=action_space_size, observation_space_size=state_space_size)
-        self.optimizer = torch.optim.AdamW(self.policy_network.parameters(), lr=0.00008)
+        self.optimizer = torch.optim.Adam(self.policy_network.parameters(), lr=0.0001)
         self.episode_rewards = []
         self.log_probs = []
         pass
@@ -28,14 +28,10 @@ class Policy_Gradient_REINFORCE:
             rewards_every_step.insert(0, reward_to_go)
             pass
 
-
-
         loss = 0
         for log_prob, step_reward in zip(self.log_probs, rewards_every_step):
             loss += log_prob*step_reward
             pass
-
-
 
         loss = -loss
         self.optimizer.zero_grad()

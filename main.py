@@ -26,7 +26,7 @@ def preprocess_state(state):
 
 agent = Policy_Gradient_REINFORCE.Policy_Gradient_REINFORCE(action_space_size=action_space_dims, state_space_size=obs_space_dims)
 for episode in range(num_episodes):
-    state = env.reset(seed=0)[0]
+    state = env.reset()[0]
     episode_rewards = []
     for t in range(max_timesteps):
         state = preprocess_state(state)
