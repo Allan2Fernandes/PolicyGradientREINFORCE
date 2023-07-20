@@ -1,25 +1,23 @@
 import sys
-
 import gymnasium as gym
 import torch
 import numpy as np
 import random
 from collections import deque
-
 import Policy_Gradient_REINFORCE
 
 # Create and wrap the environment
 env = gym.make('InvertedPendulum-v4', render_mode='human')
 
-total_num_episodes = int(5e3)  # Total number of episodes
-# Observation-space of InvertedPendulum-v4 (4)
 obs_space_dims = env.observation_space.shape[0]
-# Action-space of InvertedPendulum-v4 (1)
 action_space_dims = env.action_space.shape[0]
+
+# Constants
 num_episodes = sys.maxsize
 max_timesteps = 100000
-rewards_moving_window = deque(maxlen=50) # 50 episode window moving average
+statistics_window_size = 50
 
+rewards_moving_window = deque(maxlen=statistics_window_size)
 
 def preprocess_state(state):
     state = torch.tensor(state, dtype=torch.float32)
